@@ -1,0 +1,94 @@
+{
+  "experiment_name": "moghet_sample_ablation",
+  "description": "MOGHET模型示例消融实验",
+  "training_config": {
+    "epochs": 2,
+    "batch_size": 16,
+    "lr": 0.0001,
+    "weight_decay": 1e-05,
+    "patience": 10,
+    "min_delta": 0.001,
+    "random_seed": 42
+  },
+  "model_config": {
+    "gnn_hidden_channels": 32,
+    "pathway_out_channels": 16,
+    "pathway_embedding_dim": 4,
+    "intra_attention_hidden_channels": 8,
+    "inter_attention_hidden_channels": 8,
+    "clinical_hidden_channels": 8,
+    "final_hidden_channels": 16,
+    "dropout_rate": 0.3,
+    "num_pathways": 50,
+    "clinical_in_features": 10,
+    "metadata": null
+  },
+  "data_config": {
+    "data_path": "./data/processed",
+    "dataset_name": "tcga_survival_data"
+  },
+  "evaluation_config": {
+    "k_folds": 3,
+    "test_size": 0.2,
+    "metrics": [
+      "c_index",
+      "loss"
+    ],
+    "save_predictions": false
+  },
+  "ablation_experiments": {
+    "architecture": {
+      "enabled": true,
+      "priority": 1,
+      "description": "架构层次消融实验（示例）",
+      "experiments": [
+        "flat_architecture"
+      ]
+    },
+    "multiomics": {
+      "enabled": false,
+      "priority": 2,
+      "description": "多组学整合消融实验",
+      "experiments": [
+        "expression_only"
+      ]
+    },
+    "graph_structure": {
+      "enabled": false,
+      "priority": 3,
+      "description": "图结构消融实验",
+      "experiments": [
+        "homogeneous_graph"
+      ]
+    },
+    "attention": {
+      "enabled": false,
+      "priority": 4,
+      "description": "注意力机制消融实验",
+      "experiments": [
+        "no_attention"
+      ]
+    },
+    "hom_module": {
+      "enabled": false,
+      "priority": 5,
+      "description": "HOM模块消融实验",
+      "experiments": [
+        "remove_clinical_context"
+      ]
+    }
+  },
+  "resource_config": {
+    "device": "cuda",
+    "max_memory_gb": 8,
+    "parallel_jobs": 1,
+    "checkpoint_interval": 25
+  },
+  "output_config": {
+    "save_dir": "./sample_ablation_results",
+    "log_level": "INFO",
+    "save_models": false,
+    "save_intermediate": true,
+    "create_visualizations": true
+  }
+}

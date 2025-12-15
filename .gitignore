@@ -1,0 +1,27 @@
+# Exclude data, results, and figtable directories
+moghet/data/
+moghet/results/
+moghet/figtable/
+
+# Standard Python ignores
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyTorch model files
+*.pt
+*.pth
+
+# IDE files
+.vscode/
+.idea/
+
+# Log files
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.trae/

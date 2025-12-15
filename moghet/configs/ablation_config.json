@@ -1,0 +1,116 @@
+{
+  "experiment_name": "moghet_comprehensive_ablation",
+  "description": "MOGHET模型综合消融实验配置",
+  
+  "training_config": {
+    "epochs": 200,
+    "batch_size": 32,
+    "lr": 1e-4,
+    "weight_decay": 1e-5,
+    "patience": 20,
+    "min_delta": 0.001,
+    "random_seed": 42
+  },
+  
+  "model_config": {
+    "gnn_hidden_channels": 64,
+    "pathway_out_channels": 32,
+    "pathway_embedding_dim": 8,
+    "intra_attention_hidden_channels": 16,
+    "inter_attention_hidden_channels": 16,
+    "clinical_hidden_channels": 16,
+    "final_hidden_channels": 32,
+    "dropout_rate": 0.3
+  },
+  
+  "data_config": {
+    "num_pathways": null,
+    "clinical_in_features": null,
+    "metadata": null,
+    "data_path": "./data/processed",
+    "dataset_name": "tcga_survival"
+  },
+  
+  "evaluation_config": {
+    "k_folds": 5,
+    "test_size": 0.2,
+    "metrics": ["c_index", "auc", "loss"],
+    "save_predictions": true
+  },
+  
+  "ablation_experiments": {
+    "architecture": {
+      "enabled": true,
+      "priority": 1,
+      "description": "架构层次消融实验",
+      "experiments": [
+        "flat_architecture",
+        "mean_pooling", 
+        "max_pooling"
+      ]
+    },
+    "multiomics": {
+      "enabled": true,
+      "priority": 1,
+      "description": "多组学整合消融实验",
+      "experiments": [
+        "expression_only",
+        "expression_cnv",
+        "expression_mutation",
+        "expression_clinical",
+        "simple_concatenation"
+      ]
+    },
+    "graph_structure": {
+      "enabled": true,
+      "priority": 2,
+      "description": "图结构消融实验",
+      "experiments": [
+        "homogeneous_graph",
+        "fully_connected"
+      ]
+    },
+    "attention": {
+      "enabled": true,
+      "priority": 3,
+      "description": "注意力机制消融实验",
+      "experiments": [
+        "intra_attention_only",
+        "inter_attention_only",
+        "no_attention",
+        "single_head",
+        "double_head",
+        "eight_head"
+      ]
+    },
+    "hom_module": {
+      "enabled": true,
+      "priority": 4,
+      "description": "HOM模块消融实验",
+      "experiments": [
+        "remove_clinical_context",
+        "remove_pathway_context",
+        "remove_modulator_network",
+        "fixed_modulation",
+        "scaling_only",
+        "offset_only",
+        "gating"
+      ]
+    }
+  },
+  
+  "resource_config": {
+    "device": "cuda",
+    "max_memory_gb": 16,
+    "parallel_jobs": 1,
+    "checkpoint_interval": 50
+  },
+  
+  "output_config": {
+    "save_dir": "./ablation_results",
+    "log_level": "INFO",
+    "save_models": false,
+    "save_intermediate": true,
+    "create_visualizations": true
+  }
+}

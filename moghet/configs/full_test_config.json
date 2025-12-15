@@ -1,0 +1,94 @@
+{
+  "experiment_name": "moghet_sample_ablation",
+  "description": "MOGHET\u6a21\u578b\u793a\u4f8b\u6d88\u878d\u5b9e\u9a8c",
+  "training_config": {
+    "epochs": 50,
+    "batch_size": 16,
+    "lr": 0.0001,
+    "weight_decay": 1e-05,
+    "patience": 10,
+    "min_delta": 0.001,
+    "random_seed": 42
+  },
+  "model_config": {
+    "gnn_hidden_channels": 32,
+    "pathway_out_channels": 16,
+    "pathway_embedding_dim": 4,
+    "intra_attention_hidden_channels": 8,
+    "inter_attention_hidden_channels": 8,
+    "clinical_hidden_channels": 8,
+    "final_hidden_channels": 16,
+    "dropout_rate": 0.3,
+    "num_pathways": 50,
+    "clinical_in_features": 10,
+    "metadata": null
+  },
+  "data_config": {
+    "data_path": "./data/processed",
+    "dataset_name": "sample_survival_data"
+  },
+  "evaluation_config": {
+    "k_folds": 3,
+    "test_size": 0.2,
+    "metrics": [
+      "c_index",
+      "loss"
+    ],
+    "save_predictions": false
+  },
+  "ablation_experiments": {
+    "architecture": {
+      "enabled": true,
+      "priority": 1,
+      "description": "\u67b6\u6784\u5c42\u6b21\u6d88\u878d\u5b9e\u9a8c\uff08\u793a\u4f8b\uff09",
+      "experiments": [
+        "flat_architecture"
+      ]
+    },
+    "multiomics": {
+      "enabled": true,
+      "priority": 2,
+      "description": "\u591a\u7ec4\u5b66\u6574\u5408\u6d88\u878d\u5b9e\u9a8c",
+      "experiments": [
+        "expression_only"
+      ]
+    },
+    "graph_structure": {
+      "enabled": true,
+      "priority": 3,
+      "description": "\u56fe\u7ed3\u6784\u6d88\u878d\u5b9e\u9a8c",
+      "experiments": [
+        "homogeneous_graph"
+      ]
+    },
+    "attention": {
+      "enabled": true,
+      "priority": 4,
+      "description": "\u6ce8\u610f\u529b\u673a\u5236\u6d88\u878d\u5b9e\u9a8c",
+      "experiments": [
+        "no_attention"
+      ]
+    },
+    "hom_module": {
+      "enabled": true,
+      "priority": 5,
+      "description": "HOM\u6a21\u5757\u6d88\u878d\u5b9e\u9a8c",
+      "experiments": [
+        "remove_clinical_context"
+      ]
+    }
+  },
+  "resource_config": {
+    "device": "cuda",
+    "max_memory_gb": 8,
+    "parallel_jobs": 1,
+    "checkpoint_interval": 25
+  },
+  "output_config": {
+    "save_dir": "./sample_ablation_results",
+    "log_level": "INFO",
+    "save_models": false,
+    "save_intermediate": true,
+    "create_visualizations": true
+  }
+}
